@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ "main" ] 
   pull_request:
     branches: [ "main" ]
 
@@ -17,6 +17,29 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-group: [1,2,3] 
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+          echo "${{ matrix.test-group }}"
+
+  
+  build2:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -35,7 +58,9 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
 
-  custom:
+  
+  Do:
+    needs: [build, build2]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6.1.0
@@ -43,11 +68,8 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v7.0.0
         with:
-          python-version: "3.12"
+          python-version: "3.14"
 
       - name: Run KFC script
         run: python .github/scripts/kfc.py
         
-        
-      
-  
